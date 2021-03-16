@@ -2,6 +2,8 @@ package it.polito.tdp.alien;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.regex.*;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -32,16 +34,24 @@ public class FXMLController {
 
     @FXML
     void doTranslate(ActionEvent event) {
-    	 String testo= this.txtInput.getText();
+    	 String testo= this.txtInput.getText().toLowerCase();
     	 if (testo.isEmpty()) {
     		 this.txtRis.setText("Inserire una parola da cercare, o una parola e la sua traduzione");
     		 return;
     	 }
+    	 
     	 if (testo.contains("<")==false || testo.contains(">")==false) {
     		 this.txtRis.setText("FORMATO SBAGLIATO, inserire <alienWord> <translate> o solo <alienWord>");
     		 return;
     	 }
     	 String[] campi= testo.split("> <");
+    	 Pattern pattern = Pattern.compile("[A-Za-z]*");
+    	 Matcher matcher = pattern.matcher(campi[0]);
+    	 //Matcher matcher2= pattern.matcher(campi[1]);
+    	 if (matcher.matches()) {
+    		 this.txtRis.setText("Sono ammesse solo lettere, maiuscole o minuscole");
+    		 return;
+    	 }
     	 if (campi.length>2) {
     		 this.txtRis.setText("Inserire max 2 stringhe: parola e traduzione");
     		 return;
